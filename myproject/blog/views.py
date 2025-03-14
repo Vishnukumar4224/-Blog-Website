@@ -1,6 +1,6 @@
 import logging
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from .models import post
 # Create your views here.
 
@@ -23,7 +23,10 @@ def detail(request, post_id):
     # post = next((item for item in posts if item['id'] == int(post_id)), None) # this get the perticular posts items if not it write None
 
     # getting data from model by id..pk->primary key
-    Post = post.objects.get(pk=post_id)
+    try:
+        Post = post.objects.get(pk=post_id)
+    except post.DoesNotExist:
+        raise Http404("Post does not exist")
     
 
     # logger = logging.getLogger("TESTING")
