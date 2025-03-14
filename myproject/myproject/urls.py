@@ -19,6 +19,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 handler404 = 'myproject.views.custom_page_not_found'
+hander500 = 'myproject.views.custom_page_not_found'
+hander400 = 'myproject.views.custom_page_not_found'
 
 
 urlpatterns = [
