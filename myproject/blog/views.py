@@ -2,6 +2,8 @@ import logging
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from .models import post
+from django.core.paginator import Paginator
+
 # Create your views here.
 
 # Static demo data
@@ -14,8 +16,18 @@ from .models import post
 
 def index(request):
     blog_title = "Latest Posts"
+
+    #getting data from post model
     posts = post.objects.all()
-    return render(request, 'blog/index.html', {'title': blog_title, 'posts': posts})
+
+    #pagination
+    paginator = Paginator(posts, 5)
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
+    
+
+
+    return render(request, 'blog/index.html', {'title': blog_title, 'posts': page_object})
 
 def detail(request, slug):
 
