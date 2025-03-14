@@ -17,14 +17,14 @@ def index(request):
     posts = post.objects.all()
     return render(request, 'blog/index.html', {'title': blog_title, 'posts': posts})
 
-def detail(request, post_id):
+def detail(request, slug):
 
     # static demo data
     # post = next((item for item in posts if item['id'] == int(post_id)), None) # this get the perticular posts items if not it write None
 
     # getting data from model by id..pk->primary key
     try:
-        Post = post.objects.get(pk=post_id)
+        Post = post.objects.get(slug=slug)
     except post.DoesNotExist:
         raise Http404("Post does not exist")
     
