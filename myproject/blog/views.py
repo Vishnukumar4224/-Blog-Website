@@ -18,12 +18,18 @@ def index(request):
     return render(request, 'blog/index.html', {'title': blog_title, 'posts': posts})
 
 def detail(request, post_id):
-    post = next((item for item in posts if item['id'] == int(post_id)), None) # this get the perticular posts items if not it write None
+
+    # static demo data
+    # post = next((item for item in posts if item['id'] == int(post_id)), None) # this get the perticular posts items if not it write None
+
+    # getting data from model by id..pk->primary key
+    Post = post.objects.get(pk=post_id)
+    
 
     # logger = logging.getLogger("TESTING")
     # logger.debug(f'post variable is {post}')
 
-    return render(request, 'blog/detail.html', {'post': post})
+    return render(request, 'blog/detail.html', {'post': Post})
 
 def old_url_redirect(request):
     return redirect('blog:new_page_url')
