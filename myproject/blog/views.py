@@ -25,6 +25,8 @@ def detail(request, slug):
     # getting data from model by id..pk->primary key
     try:
         Post = post.objects.get(slug=slug)
+        related_post = post.objects.filter(category = Post.category).exclude(pk=Post.pk)
+
     except post.DoesNotExist:
         raise Http404("Post does not exist")
     
@@ -32,7 +34,7 @@ def detail(request, slug):
     # logger = logging.getLogger("TESTING")
     # logger.debug(f'post variable is {post}')
 
-    return render(request, 'blog/detail.html', {'post': Post})
+    return render(request, 'blog/detail.html', {'post': Post, 'related_posts': related_post})
 
 def old_url_redirect(request):
     return redirect('blog:new_page_url')
