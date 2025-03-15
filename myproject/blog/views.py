@@ -5,7 +5,7 @@ from .models import post, about_us
 from django.core.paginator import Paginator
 from .forms import ContactForm, RegisterForm, LoginForm
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login as auth_login,logout as auth_logout
 
 # Create your views here.
 
@@ -90,6 +90,7 @@ def register(request):
             user.save()
             print('User created')
             messages.success(request, 'User created successfully')
+            return redirect('blog:login')
 
     return render(request, 'blog/register.html', {'form': form})
     
@@ -110,3 +111,11 @@ def login(request):
         form = LoginForm()
     
     return render(request, 'blog/login.html', {'form': form})
+
+def dashboard(request):
+    blog_title = "My Posts"
+    return render(request, 'blog/dashboard.html', {'title': blog_title})
+
+def logout(request):
+    auth_logout(request)
+    return redirect('blog:index')
