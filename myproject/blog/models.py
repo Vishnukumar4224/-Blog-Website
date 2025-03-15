@@ -24,4 +24,7 @@ class post(models.Model):
 
     def __str__(self):
         return self.title
-    
+
+#about us model
+class about_us(models.Model):
+    content = models.TextField()
