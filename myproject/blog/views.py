@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404
 from .models import post, about_us
 from django.core.paginator import Paginator
-from .forms import ContactForm, RegisterForm
+from .forms import ContactForm, RegisterForm, LoginForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login
 
 # Create your views here.
 
@@ -83,16 +85,28 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save() #user data created
+            user = form.save(commit=False) #user data created
+            user.set_password(form.cleaned_data['password']) #password encrypted
+            user.save()
             print('User created')
+            messages.success(request, 'User created successfully')
 
     return render(request, 'blog/register.html', {'form': form})
+    
 
 
-
-# def old_url_redirect(request):
-#     return redirect('blog:new_page_url')
-
-
-# def new_url(request):
-#     return HttpResponse("This is new URL")
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                auth_login(request,user)
+                print('User logged in')
+                return redirect('blog:dashboard')
+    else:
+        form = LoginForm()
+    
+    return render(request, 'blog/login.html', {'form': form})
