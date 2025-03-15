@@ -83,7 +83,9 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save() #user data created
+            user = form.save(commit=False) #user data created
+            user.set_password(form.cleaned_data['password']) #password encrypted
+            user.save()
             print('User created')
 
     return render(request, 'blog/register.html', {'form': form})
